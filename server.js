@@ -1,4 +1,9 @@
 require('dotenv').config();
+const dns = require('dns');
+if (dns.setDefaultResultOrder) {
+    dns.setDefaultResultOrder('ipv4first');
+}
+
 // Import the Express library to create our web server
 const express = require('express');
 const cors = require('cors');
@@ -73,6 +78,7 @@ app.post('/register', async (req, res) => {
         
         res.status(201).json({ message: 'User registered successfully.' });
     } catch (error) {
+        console.error('Error during registration:', error);
         if (error.code === '23505') return res.status(400).json({ message: 'Email already exists.' });
         res.status(500).json({ message: 'Error registering user.' });
     }
@@ -93,6 +99,7 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
         res.status(200).json({ message: 'Login successful', token, user: { id: user.id, name: user.name, email: user.email } });
     } catch (error) {
+        console.error('Error during login:', error);
         res.status(500).json({ message: 'Error logging in.' });
     }
 });
