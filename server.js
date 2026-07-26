@@ -42,6 +42,15 @@ const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: false // Required for Supabase SSL connections
+    },
+    lookup: (hostname, options, callback) => {
+        if (typeof options === 'function') {
+            callback = options;
+            options = {};
+        }
+        const lookupOptions = typeof options === 'object' ? { ...options } : {};
+        lookupOptions.family = 4;
+        dns.lookup(hostname, lookupOptions, callback);
     }
 });
 
