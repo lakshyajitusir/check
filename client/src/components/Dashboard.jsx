@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 function Dashboard() {
   const [users, setUsers] = useState([]);
@@ -13,7 +14,7 @@ function Dashboard() {
 
   // Setup axios default auth header
   const api = axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: API_URL,
     headers: { Authorization: `Bearer ${token}` }
   });
 
